@@ -12,15 +12,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [AllowAny]
-
+    
     def get_permissions(self):
         if self.action =='create':
             return [AllowAny()]
         return [IsAdminUser()]
-
-# # Create a user
-# class CreateUserView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [AllowAny]
