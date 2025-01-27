@@ -3,7 +3,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet
-from .serializers import UserSerializer
+from ..serializers.user_serializer import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 # Create your views here.
@@ -14,6 +14,6 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     
     def get_permissions(self):
-        if self.action =='create':
+        if self.request.method == 'POST':
             return [AllowAny()]
         return [IsAdminUser()]
