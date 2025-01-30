@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.urls import reverse
 from faker import Faker
 from django.contrib.auth.models import User
-from ..models import Category
+from ..models import Category, Module
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class TestSetup(APITestCase):
@@ -49,6 +49,36 @@ class CategoryTestSetUp(APITestCase):
         self.category1 = Category.objects.create(
             name='Year 1 Semmester 1', description="Modules for first semester"
         )
+        return super().setUp()
+    
+    def tearDown(self):
+        return super().tearDown()
+    
+class ModuleTestSetUp(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.module_url = '/api/module/'
+
+        # Admin User
+        self.admin_user = User.objects.create_superuser(
+            username='admin', email='admin@gmail.com', password='adminpassword'
+        )
+
+        # Generate admin JWT token
+        refresh = RefreshToken.for_user(self.admin_user)
+        self.access_token = str(refresh.access_token)
+        
+        # Regular User
+        self.regular_user = User.objects.create_user(username= 'user', email='user@gmail.com', password='userpassword')
+
+        self.category = Category.objects.create(
+            name='Year 1 Semmester 1', description="Modules for first semester"
+        )
+
+        self.module1 = Module.objects.create(
+            code='COM 1103', name= "Communication", description= "This Module has Communication Resources",category= self.category
+        )
+
         return super().setUp()
     
     def tearDown(self):
