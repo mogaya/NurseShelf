@@ -1,9 +1,9 @@
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .test_setup import TestSetup
+from .test_setup import BaseTestSetup
 
-class AuthenticationTests(TestSetup):
+class AuthenticationTests(BaseTestSetup):
 
     def test_not_register_with_no_data(self):
         res = self.client.post(self.register_url)
@@ -11,6 +11,10 @@ class AuthenticationTests(TestSetup):
 
     def test_register_correctly(self):
         res = self.client.post(self.register_url, self.user_data, format="json")
+
+        # import pdb
+        # pdb.set_trace()
+        
         self.assertEqual(res.data['email'], self.user_data['email'])
         self.assertEqual(res.data['username'], self.user_data['username'])
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
