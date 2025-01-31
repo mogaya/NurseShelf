@@ -49,9 +49,6 @@ class CategoryTests(CategoryTestSetUp):
     def test_permission_for_regular_user(self):
         self.client.logout()
         
-        regular_refresh = RefreshToken.for_user(self.regular_user)
-        self.regular_access_token = str(regular_refresh.access_token)
-
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.regular_access_token}')
 
         # Attempt creating a category
@@ -65,5 +62,5 @@ class CategoryTests(CategoryTestSetUp):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
         # Attempt to delete
-        self.client.delete(f'{self.category_url}{self.category1.id}/')
+        res=self.client.delete(f'{self.category_url}{self.category1.id}/')
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)

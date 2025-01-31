@@ -41,9 +41,6 @@ class AuthenticationTests(BaseTestSetup):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('access', res.data)
 
-    # def test_invalid_token(self):
-    #     self.client.credentials
-
     def test_invalid_refresh_token(self):
         refresh_data = {'refresh': 'invalid_refresh_token'}
         res = self.client.post(self.refresh_token_url, refresh_data)

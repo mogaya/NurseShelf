@@ -35,12 +35,15 @@ class BaseTestSetup(APITestCase):
         # Creating a regular User
         self.regular_user = User.objects.create_user(username='user', email='user@gmail.com', password='userpassword')
 
+        # Generating JWT token for admin
+        regular_refresh = RefreshToken.for_user(self.regular_user)
+        self.regular_access_token = str(regular_refresh.access_token)
+
         return super().setUp()
     
     def tearDown(self):
         return super().tearDown()
     
-
 class CategoryTestSetUp(BaseTestSetup):
     def setUp(self):
 
@@ -62,6 +65,10 @@ class ModuleTestSetUp(BaseTestSetup):
 
         self.module1 = Module.objects.create(
             code='COM 1103', name= "Communication", description= "This Module has Communication Resources",category= self.category
+        )
+
+        self.module2 = Module.objects.create(
+            code='COM 1104', name= "Communication1", description= "This Module has Communication1 Resources",category= self.category
         )
 
         return super().setUp()
