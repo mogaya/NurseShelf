@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 User = get_user_model()
 
@@ -44,6 +45,12 @@ class Subscription(models.Model):
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     is_active = models.BooleanField(default=True)
+
+    # Deactivates subscription if expired
+    def check_expiration(self):
+        if self.is_active and self.end_date < now().date():
+            self.is_active = False
+            self.save()
 
     def __str__(self):
         return f"{self.user.username} -> {self.category.name} (Active: {self.is_active})"

@@ -27,6 +27,9 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     - Users: See only their own subscriptions
     """
     def get_queryset(self):
+        # Deactivating expired subscriptions
+        Subscription.objects.filter(is_active=True, end_date__lt=now().date()).update(is_active=False)
+
         user = self.request.user
 
         if user.is_staff:

@@ -90,6 +90,10 @@ class SubscriptionTestSetUp(BaseTestSetup):
             name='Year 1 Semmester 2', description="Modules for second semester"
         )
 
+        self.category3 = Category.objects.create(
+            name='Year 2 Semmester 1', description="Modules for first semester year 2"
+        )
+
         self.subscription1 = Subscription.objects.create(
             user = self.regular_user,
             category = self.category1,
@@ -101,6 +105,13 @@ class SubscriptionTestSetUp(BaseTestSetup):
             user = self.admin_user,
             category = self.category2,
             end_date = now().date() + timedelta(days = 365.25/2),
+            is_active = True
+        )
+
+        self.subscription3 = Subscription.objects.create(
+            user = self.regular_user,
+            category = self.category3,
+            end_date = now().date() - timedelta(days = 2),
             is_active = True
         )
 

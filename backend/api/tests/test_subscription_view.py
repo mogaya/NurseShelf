@@ -9,7 +9,7 @@ class TestSubscriptionView(SubscriptionTestSetUp):
 
         res = self.client.get(self.subscription_url)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 2)
+        self.assertEqual(len(res.data), 3)
 
     def test_user_can_only_view_own_subscriptions(self):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.regular_access_token}')
@@ -19,7 +19,7 @@ class TestSubscriptionView(SubscriptionTestSetUp):
         self.assertEqual(len(res.data), 1)
 
     def test_user_can_subscribe_to_a_category(self):
-        self.client.logout()
+        # self.client.logout()
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.regular_access_token}')
 
         data = {
@@ -34,7 +34,7 @@ class TestSubscriptionView(SubscriptionTestSetUp):
         # pdb.set_trace()
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Subscription.objects.filter(user=self.regular_user).count(), 2)
+        self.assertEqual(Subscription.objects.filter(user=self.regular_user).count(), 3)
 
     def test_user_cannot_subscribe_twice_to_same_category(self):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.regular_access_token}')
@@ -76,6 +76,16 @@ class TestSubscriptionView(SubscriptionTestSetUp):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
+    def test_expired_subscription_is_deactivated(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.regular_access_token}')
+
+        res = self.client.get(self.subscription_url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+
+        self.subscription3.refresh_from_db()
+        self.assertFalse(self.subscription3.is_active)
 
 
 """
@@ -94,4 +104,6 @@ What These Tests Verify
     (test_user_cannot_cancel_another_users_subscription).
  - Admins can cancel any subscription 
     (test_admin_can_cancel_any_subscription).
+ - Test that expired subscriptions are deactivated automatically
+    (test_expired_subscription_is_deactivated)
 """
