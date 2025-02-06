@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.utils.timezone import now, timedelta
 from ..models import Subscription
@@ -40,11 +41,11 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     # Allowing users to cancel own subscription, Admin can cancel any subscription
     @action(detail=True, methods=['POST'])
     def cancel(self, request, pk=None):
-
+        # print(f"Cancel action called for subscription ID: {pk}")
         subscription = self.get_object()
 
         if not request.user.is_staff and subscription.user != request.user:
-            return Respose({"error": "You can only cancel your own subscription"}, status.HTTP_403_FORBIDDEN)
+            return Response({"error": "You can only cancel your own subscription"}, status=status.HTTP_403_FORBIDDEN)
         
         subscription.is_active = False
         subscription.save()

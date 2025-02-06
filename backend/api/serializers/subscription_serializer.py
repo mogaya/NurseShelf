@@ -7,7 +7,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = ['id', 'user', 'category', 'category_name', 'start_date', 'end_date', 'is_active']
-        read_only_fields = ['id', 'start_date', 'is_active']
+        read_only_fields = ['id', 'start_date', 'is_active', 'end_date']
 
     # User doesn't subscribe to same category twice
     def validate(self, data):

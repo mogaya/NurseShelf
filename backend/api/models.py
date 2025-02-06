@@ -41,7 +41,7 @@ class Resource(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subscriptions')
-    start_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     is_active = models.BooleanField(default=True)
 

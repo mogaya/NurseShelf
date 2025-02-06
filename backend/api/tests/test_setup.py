@@ -1,8 +1,9 @@
+from django.utils.timezone import now, timedelta
 from rest_framework.test import APITestCase, APIClient
 from django.urls import reverse
 from faker import Faker
 from django.contrib.auth.models import User
-from ..models import Category, Module
+from ..models import Category, Module, Subscription
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class BaseTestSetup(APITestCase):
@@ -15,6 +16,7 @@ class BaseTestSetup(APITestCase):
         self.refresh_token_url = reverse('refresh')
         self.category_url = '/api/category/'
         self.module_url = '/api/module/'
+        self.subscription_url = '/api/subscription/'
 
         # Creating Admin User
         self.admin_user = User.objects.create_superuser(username='admin', email='admin@gmail.com', password='adminpassword')
@@ -72,6 +74,40 @@ class ModuleTestSetUp(BaseTestSetup):
         )
 
         return super().setUp()
+    
+    def tearDown(self):
+        return super().tearDown()
+    
+class SubscriptionTestSetUp(BaseTestSetup):
+    def setUp(self):
+        super().setUp()
+
+        self.category1 = Category.objects.create(
+            name='Year 1 Semmester 1', description="Modules for first semester"
+        )
+
+        self.category2 = Category.objects.create(
+            name='Year 1 Semmester 2', description="Modules for second semester"
+        )
+
+        self.subscription1 = Subscription.objects.create(
+            user = self.regular_user,
+            category = self.category1,
+            end_date = now().date() + timedelta(days = 365.25/2),
+            is_active = True
+        )
+
+        self.subscription2 = Subscription.objects.create(
+            user = self.admin_user,
+            category = self.category2,
+            end_date = now().date() + timedelta(days = 365.25/2),
+            is_active = True
+        )
+
+        # import pdb
+        # pdb.set_trace()
+
+        # return super().setUp()
     
     def tearDown(self):
         return super().tearDown()
