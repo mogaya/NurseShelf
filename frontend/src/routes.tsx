@@ -7,22 +7,18 @@ import Modules from "./pages/Modules";
 import Resources from "./pages/Resources";
 import AdminDashboard from "./pages/AdminDashboard";
 
-import React from "react";
-
-const routes = () => {
+const RoutesComponent = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/subscriptions" element={<Subscriptions />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/modules" element={<Modules />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/subscriptions" element={<Subscriptions />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/modules" element={<Modules />} />
+      <Route path="/resources" element={<Resources />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+    </Routes>
   );
 };
 
-export default routes;
+export default RoutesComponent;
