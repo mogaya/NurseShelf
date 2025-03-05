@@ -21,6 +21,7 @@ class Module(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='modules')
+    trending = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -36,7 +37,7 @@ class Resource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} ({'Revision' if self.is_revision else "Notes" })"
+        return f"{self.title} ({'Revision' if self.is_revision else 'Notes'})"
 
 # Subscription Model
 class Subscription(models.Model):
